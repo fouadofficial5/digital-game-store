@@ -1,11 +1,622 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>Game Store</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Digital Game Store</title>
+  <meta name="description" content="Digital store for HTML5 games and code products" />
+  <style>
+    :root{
+      --bg:#0b0f19; --card:#0f1626; --card2:#111b2f;
+      --text:#eaf0ff; --muted:#a6b2d6; --line:rgba(255,255,255,.10);
+      --brand:#7c5cff; --brand2:#30d5c8; --danger:#ff4d6d;
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans Arabic", sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 600px at 20% 10%, rgba(124,92,255,.22), transparent 60%),
+        radial-gradient(900px 600px at 80% 0%, rgba(48,213,200,.16), transparent 55%),
+        radial-gradient(900px 600px at 70% 90%, rgba(255,77,109,.10), transparent 55%),
+        linear-gradient(180deg, #070a12, var(--bg));
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1120px; margin:0 auto; padding:18px 16px 60px}
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(11,15,25,.58);
+      border-bottom:1px solid var(--line);
+    }
+    .nav{
+      max-width:1120px; margin:0 auto; padding:14px 16px;
+      display:flex; align-items:center; gap:12px; justify-content:space-between;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px; font-weight:800;
+      letter-spacing:.3px;
+    }
+    .logo{
+      width:38px; height:38px; border-radius:12px;
+      background: conic-gradient(from 200deg, var(--brand), var(--brand2), var(--brand));
+      box-shadow: 0 10px 30px rgba(124,92,255,.25);
+    }
+    .navActions{display:flex; align-items:center; gap:10px}
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px; border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid var(--line);
+      color:var(--muted);
+      font-size:13px;
+      user-select:none;
+    }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px;
+      padding:12px 14px; border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.07);
+      color:var(--text);
+      cursor:pointer;
+      transition: transform .08s ease, background .2s ease, border-color .2s ease;
+      user-select:none;
+      font-weight:700;
+    }
+    .btn:hover{background: rgba(255,255,255,.10)}
+    .btn:active{transform: scale(.98)}
+    .btnPrimary{
+      background: linear-gradient(135deg, rgba(124,92,255,.95), rgba(48,213,200,.55));
+      border-color: rgba(255,255,255,.18);
+      box-shadow: 0 16px 40px rgba(124,92,255,.18);
+    }
+    .hero{
+      margin-top:18px;
+      padding:20px;
+      border-radius: var(--radius);
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      display:grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap:16px;
+      align-items:stretch;
+    }
+    .hero h1{margin:0; font-size:30px; line-height:1.15}
+    .hero p{margin:10px 0 0; color:var(--muted); line-height:1.7}
+    .heroCard{
+      border-radius: var(--radius);
+      border:1px solid var(--line);
+      background: radial-gradient(600px 300px at 50% 10%, rgba(124,92,255,.22), transparent 60%),
+                  linear-gradient(180deg, rgba(15,22,38,.9), rgba(15,22,38,.55));
+      padding:16px;
+      display:flex; flex-direction:column; justify-content:space-between;
+      min-height: 170px;
+    }
+    .heroKpis{display:flex; gap:10px; flex-wrap:wrap}
+    .kpi{
+      flex:1;
+      min-width:140px;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      padding:10px 12px;
+    }
+    .kpi .n{font-weight:900; font-size:18px}
+    .kpi .t{color:var(--muted); font-size:12px; margin-top:4px}
+    .gridHead{
+      margin-top:18px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .search{
+      flex:1; min-width:240px;
+      display:flex; align-items:center; gap:10px;
+      padding:12px 14px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.05);
+    }
+    .search input{
+      width:100%;
+      background: transparent;
+      border:0;
+      outline: none;
+      color:var(--text);
+      font-size:14px;
+    }
+    .select{
+      padding:12px 14px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color:var(--text);
+      font-weight:700;
+      cursor:pointer;
+      outline:none;
+    }
+    .grid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+    }
+    .card{
+      border-radius: var(--radius);
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: 0 16px 50px rgba(0,0,0,.35);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height: 320px;
+    }
+    .thumb{
+      height:160px;
+      background: radial-gradient(800px 260px at 50% 0%, rgba(124,92,255,.30), transparent 60%),
+                  radial-gradient(800px 260px at 80% 20%, rgba(48,213,200,.18), transparent 55%),
+                  linear-gradient(180deg, rgba(17,27,47,.95), rgba(17,27,47,.55));
+      border-bottom:1px solid var(--line);
+      padding:14px;
+      display:flex; flex-direction:column; justify-content:space-between;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      background: rgba(0,0,0,.25);
+      border:1px solid rgba(255,255,255,.14);
+      color: var(--muted);
+      font-size:12px;
+      width:fit-content;
+    }
+    .thumbTitle{
+      font-weight:900;
+      font-size:18px;
+      margin-top:10px;
+      line-height:1.2;
+    }
+    .content{padding:14px}
+    .desc{color:var(--muted); line-height:1.6; font-size:13px; min-height:64px}
+    .meta{
+      display:flex; justify-content:space-between; align-items:center;
+      margin-top:12px; gap:10px; flex-wrap:wrap;
+    }
+    .price{
+      font-weight:900;
+      font-size:16px;
+      background: rgba(124,92,255,.14);
+      border:1px solid rgba(124,92,255,.25);
+      padding:8px 10px;
+      border-radius:999px;
+    }
+    .actions{display:flex; gap:10px; margin-top:12px}
+    .actions .btn{flex:1}
+    footer{
+      margin-top:24px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.7;
+      border-top:1px solid var(--line);
+      padding-top:14px;
+    }
+
+    /* Modal */
+    .modal{
+      position:fixed; inset:0; z-index:1000;
+      display:none;
+      align-items:center; justify-content:center;
+      padding:16px;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .modal.open{display:flex}
+    .modalBox{
+      width:min(1000px, 100%);
+      border-radius: 22px;
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(15,22,38,.92), rgba(15,22,38,.72));
+      box-shadow: 0 28px 80px rgba(0,0,0,.55);
+      overflow:hidden;
+    }
+    .modalTop{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+      padding:12px 14px;
+      border-bottom:1px solid rgba(255,255,255,.12);
+    }
+    .modalTop .t{font-weight:900}
+    .close{
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      cursor:pointer;
+      font-weight:900;
+    }
+    .modalBody{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:0;
+      min-height: 520px;
+    }
+    .preview{
+      background: rgba(0,0,0,.25);
+      border-left:1px solid rgba(255,255,255,.10);
+      min-height: 520px;
+    }
+    iframe{
+      width:100%; height:100%;
+      border:0;
+      background:#000;
+    }
+    .side{
+      padding:14px;
+    }
+    .side h3{margin:0 0 8px}
+    .side p{margin:0 0 10px; color:var(--muted); line-height:1.7}
+    .line{height:1px; background: rgba(255,255,255,.10); margin:12px 0}
+    .small{font-size:12px; color:var(--muted)}
+    .danger{color: #ffd0d8}
+    .pill{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:8px 10px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color:var(--muted);
+      font-size:12px;
+      width:fit-content;
+    }
+
+    @media (max-width: 900px){
+      .hero{grid-template-columns:1fr}
+      .grid{grid-template-columns: repeat(2, 1fr)}
+      .modalBody{grid-template-columns:1fr}
+      .preview{border-left:0; border-top:1px solid rgba(255,255,255,.10); min-height: 420px}
+    }
+    @media (max-width: 560px){
+      .grid{grid-template-columns: 1fr}
+    }
+  </style>
 </head>
+
 <body>
-  <h1>My Digital Game Store</h1>
-  <p>Coming soon...</p>
+<header>
+  <div class="nav">
+    <div class="brand">
+      <div class="logo"></div>
+      <div>
+        <div style="font-size:15px">Digital Game Store</div>
+        <div style="font-size:12px;color:var(--muted)">HTML5 games & code products</div>
+      </div>
+    </div>
+
+    <div class="navActions">
+      <div class="chip">✅ PayPal</div>
+      <button class="btn" id="howBtn">كيفاش كتخدم؟</button>
+      <button class="btn btnPrimary" id="contactBtn">تواصل</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <div>
+      <h1>متجر رقمي لبيع ألعاب HTML5 وأكواد جاهزة</h1>
+      <p>
+        جرّب المنتج قبل الشراء (Demo)، ومن بعد الدفع عبر PayPal كتوصلك الملفات بشكل آمن.
+        <br />
+        (حالياً: الدفع برابط PayPal + تسليم يدوي/أوتوماتيك لاحقاً).
+      </p>
+
+      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btnPrimary" onclick="scrollToProducts()">شوف المنتجات</button>
+        <a class="btn" href="#faq">أسئلة شائعة</a>
+      </div>
+    </div>
+
+    <div class="heroCard">
+      <div class="heroKpis">
+        <div class="kpi">
+          <div class="n" id="kpiProducts">1</div>
+          <div class="t">عدد المنتجات</div>
+        </div>
+        <div class="kpi">
+          <div class="n">Demo</div>
+          <div class="t">تجربة قبل الشراء</div>
+        </div>
+        <div class="kpi">
+          <div class="n">PayPal</div>
+          <div class="t">وسيلة الدفع</div>
+        </div>
+      </div>
+
+      <div class="small">
+        ⚠️ ملاحظة مهمة: ما تبيعش أكواد/ألعاب ديال ناس آخرين بلا رخصة (License).
+        وخاص المنتج يكون من صنعك أو عندك حق إعادة البيع.
+      </div>
+    </div>
+  </section>
+
+  <section class="gridHead" id="products">
+    <div class="search">
+      🔎
+      <input id="q" placeholder="قلّب على منتج (مثلاً: Boo)" autocomplete="off" />
+    </div>
+
+    <select class="select" id="cat">
+      <option value="all">كلشي</option>
+      <option value="game">ألعاب</option>
+      <option value="ui">واجهات UI</option>
+      <option value="code">أكواد</option>
+    </select>
+
+    <select class="select" id="sort">
+      <option value="popular">الأكثر طلباً</option>
+      <option value="price_asc">السعر: من الأقل</option>
+      <option value="price_desc">السعر: من الأعلى</option>
+      <option value="newest">الأحدث</option>
+    </select>
+  </section>
+
+  <section class="grid" id="grid"></section>
+
+  <section id="faq" style="margin-top:22px">
+    <div class="card" style="padding:14px">
+      <h2 style="margin:0 0 8px">أسئلة شائعة</h2>
+      <div class="desc">
+        <b>1) واش نقدر نضمن التحميل يكون غير بعد الدفع؟</b><br>
+        نعم، ولكن خاصنا خطوة إضافية: Webhook / Serverless للتحقق من PayPal. دابا المتجر جاهز، ومن بعد كنزيدو الحماية.
+        <div class="line"></div>
+        <b>2) واش نقدر نبيع Cheats أو Hacks للألعاب؟</b><br>
+        لا. هذا غالباً كيكون مخالف لشروط الألعاب وقد يعرّضك للحظر.
+        <div class="line"></div>
+        <b>3) واش نقدر ناخد أكواد من CodePen ونبيعها؟</b><br>
+        فقط إلا كانت الرخصة كتسمح (MIT مثلاً) ومع احترام شروطها (إبقاء الحقوق/الترخيص). وإلا فهو ممنوع.
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>© <span id="year"></span> — Digital Game Store</div>
+    <div>
+      هذا متجر لمنتجات رقمية أصلية. تجنب بيع محتوى مقرصن أو مخالف لشروط المنصات/الألعاب.
+    </div>
+  </footer>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modalBox">
+    <div class="modalTop">
+      <div class="t" id="mTitle">Product</div>
+      <button class="close" onclick="closeModal()">✕ إغلاق</button>
+    </div>
+
+    <div class="modalBody">
+      <div class="side">
+        <div class="pill" id="mBadge">🎮 Game</div>
+        <h3 id="mName" style="margin-top:10px">—</h3>
+        <p id="mDesc">—</p>
+
+        <div class="line"></div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <div class="price" id="mPrice">$0</div>
+          <div class="pill" id="mFiles">📦 ملفات: —</div>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="small">
+          ✅ <b>Demo</b> كيتحل فاليمين (Preview).<br>
+          ✅ منين كتخلّص فـ PayPal كيوصلوك الملفات. <br>
+          <span class="danger">⚠️ حالياً: زر PayPal هو رابط دفع (بدون تحقق تلقائي). كنزيدو التحقق فمرحلة لاحقة.</span>
+        </div>
+
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+          <a class="btn btnPrimary" id="paypalBtn" href="#" target="_blank" rel="noopener">اشري بـ PayPal</a>
+          <a class="btn" id="openPageBtn" href="#">فتح صفحة المنتج</a>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="small">
+          🧾 نصيحة: خليه عندك “Policy” و “Refund” واضحين باش ما تكونش مشاكل.
+        </div>
+      </div>
+
+      <div class="preview">
+        <iframe id="mFrame" title="Preview"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ======= PRODUCTS DATA (أول منتج: Boo Game) =======
+  // لاحقاً: أي منتج جديد كنزيدو نفس البنية هنا (أو نخليوها في products.json)
+  const PRODUCTS = [
+    {
+      id: "boo-game",
+      type: "game",
+      title: "Boo! — Ghost Candy Game",
+      short: "لعبة HTML5 ممتعة (Demo + الكود الكامل). جاهزة للبيع والتعديل.",
+      priceUSD: 19,
+      currency: "$",
+      files: "HTML واحد (Game)",
+      // Preview path (هذا هو الملف اللي عندك حالياً: products/boo-game/preview/index.html)
+      previewUrl: "products/boo-game/preview/index.html",
+      // Product page (غادي ننشؤوه فالخطوة الجاية)
+      pageUrl: "products/boo-game/index.html",
+      // PayPal payment link:
+      // ضع هنا PayPal.me ديالك أو زر PayPal خاص (Hosted Button) من حساب PayPal
+      // مثال: https://www.paypal.me/USERNAME/19
+      paypalUrl: "https://www.paypal.me/PUT_YOUR_PAYPAL_USERNAME/19"
+    }
+  ];
+
+  // ======= RENDER =======
+  const grid = document.getElementById("grid");
+  const q = document.getElementById("q");
+  const cat = document.getElementById("cat");
+  const sort = document.getElementById("sort");
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+  document.getElementById("kpiProducts").textContent = PRODUCTS.length;
+
+  function badgeFor(type){
+    if(type==="game") return "🎮 لعبة";
+    if(type==="ui") return "🧩 واجهة UI";
+    return "⚙️ كود";
+  }
+
+  function sortProducts(list){
+    const s = sort.value;
+    const arr = [...list];
+    if(s==="price_asc") arr.sort((a,b)=>a.priceUSD-b.priceUSD);
+    else if(s==="price_desc") arr.sort((a,b)=>b.priceUSD-a.priceUSD);
+    else if(s==="newest") arr.reverse(); // بسيط حالياً
+    // popular: كما هو
+    return arr;
+  }
+
+  function filterProducts(){
+    const text = (q.value||"").trim().toLowerCase();
+    const category = cat.value;
+
+    let list = PRODUCTS.filter(p=>{
+      const okText = !text || (p.title.toLowerCase().includes(text) || p.short.toLowerCase().includes(text));
+      const okCat = category==="all" || p.type===category;
+      return okText && okCat;
+    });
+
+    list = sortProducts(list);
+    render(list);
+  }
+
+  function render(list){
+    grid.innerHTML = "";
+    if(list.length===0){
+      grid.innerHTML = `<div class="card" style="padding:14px"><b>ما كاين حتى منتج بهاد البحث.</b></div>`;
+      return;
+    }
+
+    for(const p of list){
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="thumb">
+          <div class="badge">${badgeFor(p.type)} • Demo</div>
+          <div class="thumbTitle">${escapeHtml(p.title)}</div>
+        </div>
+        <div class="content">
+          <div class="desc">${escapeHtml(p.short)}</div>
+          <div class="meta">
+            <div class="price">${p.currency}${p.priceUSD}</div>
+            <div class="badge">📦 ${escapeHtml(p.files)}</div>
+          </div>
+          <div class="actions">
+            <button class="btn btnPrimary">جرّب / اشري</button>
+            <a class="btn" href="${p.pageUrl}">تفاصيل</a>
+          </div>
+        </div>
+      `;
+      card.querySelector("button").addEventListener("click", ()=>openModal(p.id));
+      grid.appendChild(card);
+    }
+  }
+
+  function escapeHtml(str){
+    return String(str)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  q.addEventListener("input", filterProducts);
+  cat.addEventListener("change", filterProducts);
+  sort.addEventListener("change", filterProducts);
+
+  // ======= MODAL =======
+  const modal = document.getElementById("modal");
+  const mTitle = document.getElementById("mTitle");
+  const mBadge = document.getElementById("mBadge");
+  const mName  = document.getElementById("mName");
+  const mDesc  = document.getElementById("mDesc");
+  const mPrice = document.getElementById("mPrice");
+  const mFiles = document.getElementById("mFiles");
+  const mFrame = document.getElementById("mFrame");
+  const paypalBtn = document.getElementById("paypalBtn");
+  const openPageBtn = document.getElementById("openPageBtn");
+
+  function openModal(id){
+    const p = PRODUCTS.find(x=>x.id===id);
+    if(!p) return;
+
+    mTitle.textContent = p.title;
+    mBadge.textContent = badgeFor(p.type);
+    mName.textContent = p.title;
+    mDesc.textContent = p.short;
+    mPrice.textContent = `${p.currency}${p.priceUSD}`;
+    mFiles.textContent = `📦 ملفات: ${p.files}`;
+
+    // preview
+    mFrame.src = p.previewUrl;
+
+    // paypal
+    paypalBtn.href = p.paypalUrl;
+    openPageBtn.href = p.pageUrl;
+
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden","false");
+  }
+
+  function closeModal(){
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden","true");
+    // stop iframe (optional)
+    mFrame.src = "about:blank";
+  }
+
+  window.closeModal = closeModal;
+
+  modal.addEventListener("click", (e)=>{
+    if(e.target === modal) closeModal();
+  });
+  window.addEventListener("keydown", (e)=>{
+    if(e.key==="Escape") closeModal();
+  });
+
+  function scrollToProducts(){
+    document.getElementById("products").scrollIntoView({behavior:"smooth"});
+  }
+  window.scrollToProducts = scrollToProducts;
+
+  // Simple info buttons
+  document.getElementById("howBtn").addEventListener("click", ()=>{
+    alert("✅ جرّب Demo من داخل المتجر.\n✅ اضغط اشري بـ PayPal.\n⚠️ حالياً: التحقق تلقائياً سنضيفه لاحقاً (Webhook/Serverless) باش يكون التحميل محمي 100%.");
+  });
+  document.getElementById("contactBtn").addEventListener("click", ()=>{
+    alert("ضع هنا وسائل التواصل لاحقاً: Telegram / Email / WhatsApp Business");
+  });
+
+  // initial render
+  filterProducts();
+</script>
 </body>
 </html>
